@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<title>タイトル</title>
+		<script type="text/javascript">
+			window.onload = function(){
+				let canvas = document.getElementsByTagName("canvas")[0];
+				let context = canvas.getContext("2d");
+				let x=0;
+				let colors = ["#ffff00", "#ff0000", "#c0c0c0", "#008000", "#0000ff", "#800080"];
+				let flags = [0,0,0,0,0,0];
+				function render(){
+					context.fillStyle = "black";
+					context.fillRect(0,0,640,480);
+					if(flags[0]+flags[1]+flags[2]+flags[3]+flags[4]+flags[5]==6){
+						context.font="18px 'consolas'";
+						context.fillStyle="white";
+						context.fillText("Congratulations!",10,30);
+						for(let i = 0; i < 6; ++i){
+							let ci=colors[i];
+							context.shadowOffsetX = 0;
+							context.shadowOffsetY = 0;
+							context.shadowColor = ci;
+							context.shadowBlur = 20;
+							context.fillStyle = ci;
+							context.beginPath();
+							context.arc(320+150*Math.cos((-60*i-90+x)/180*Math.PI),240+150*Math.sin((-60*i-90+x)/180*Math.PI),30,0,Math.PI*2,1);
+							context.fill();
+						}
+					}else{
+						context.font="18px 'consolas'";
+						context.fillStyle="white";
+						context.fillText("Find 6 keys in your keyboards to display 6 colors of the Orbs.",10,30);
+						context.fillText("Then press them.",10,400);
+						for(let i = 0; i < 6; i++){
+							if(flags[i]==1){
+								let ci=colors[i];
+								context.shadowOffsetX = 0;
+								context.shadowOffsetY = 0;
+								context.shadowColor = ci;
+								context.shadowBlur = 20;
+								context.fillStyle = ci;
+								context.beginPath();			
+								context.arc(320+150*Math.cos((-60*i-90)/180*Math.PI),240+150*Math.sin((-60*i-90)/180*Math.PI),30,0,Math.PI*2,1);
+								context.fill();
+							}
+							
+						}
+					}
+				}
+				let press = false;
+				function animate(){
+					x++;
+					x%=360;
+					render();
+					requestAnimationFrame(animate);
+				}
+				animate();	
+				document.onkeydown = function(e){
+					if(e.keyCode==89)flags[0]=1;
+					if(e.keyCode==82)flags[1]=1;
+					if(e.keyCode==83)flags[2]=1;
+					if(e.keyCode==71)flags[3]=1;
+					if(e.keyCode==66)flags[4]=1;
+					if(e.keyCode==80)flags[5]=1;
+				};
+			}
+		</script>
+	</head>
+	<body>
+		<canvas width="640" height="480">
+		</canvas>
+	</body>
+<html>
